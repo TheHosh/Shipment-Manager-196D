@@ -26,8 +26,7 @@ Open your terminal and clone the repository:
 
 bash
 Copy code
-git clone https://github.com/yourusername/supply-chain-dapp.git
-Replace yourusername with your GitHub username if applicable.
+git clone https://github.com/TheHosh/Supply-Chain-196D
 
 2. Navigate to the Project Directory
 bash
