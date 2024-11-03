@@ -301,20 +301,8 @@ Review the Ganache CLI or GUI logs for transaction details and errors.
 MetaMask Notifications:
 
 Pay attention to any error messages or prompts from MetaMask.
-Additional Notes
+
 Smart Contract Modifications:
 
 If you modify the smart contract, remember to recompile and redeploy it.
 Update the ABI and contract address in the React application accordingly.
-Security Considerations:
-
-Never use real ETH or mainnet accounts when testing locally.
-Keep private keys secure and avoid sharing them.
-Further Development:
-
-Explore adding more features or improving the UI.
-Consider integrating additional smart contract functions.
-Testing with Multiple Users:
-
-Since the DApp simulates a supply chain with multiple participants, testing with multiple accounts helps simulate real-world scenarios.
-Collaborate with classmates by sharing the deployed contract address and testing on the same local network.
