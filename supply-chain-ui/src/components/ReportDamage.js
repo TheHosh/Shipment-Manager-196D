@@ -14,6 +14,7 @@ function ReportDamage({ contract, currentAccount }) {
   // State variables to hold form input values and messages
   const [shipmentId, setShipmentId] = useState('');
   const [damagedQuantity, setDamagedQuantity] = useState('');
+  const [damageReason, setDamageReason] = useState('')
   const [message, setMessage] = useState('');
 
   /**
@@ -25,7 +26,7 @@ function ReportDamage({ contract, currentAccount }) {
     e.preventDefault();
     try {
       // Interact with the smart contract to report damage
-      const tx = await contract.reportDamage(shipmentId, damagedQuantity);
+      const tx = await contract.reportDamage(shipmentId, damagedQuantity, damageReason);
       await tx.wait(); // Wait for the transaction to be mined
       setMessage('Damage reported successfully.');
     } catch (err) {
@@ -58,6 +59,16 @@ function ReportDamage({ contract, currentAccount }) {
             className="form-control"
             value={damagedQuantity}
             onChange={(e) => setDamagedQuantity(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Explanation for Damages</label>
+          <input
+            type="text"
+            className="form-control"
+            value={damageReason}
+            onChange={(e) => setDamageReason(e.target.value)}
             required
           />
         </div>

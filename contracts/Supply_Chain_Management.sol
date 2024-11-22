@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity ^0.8.0;
 
 /**
  * @title SupplyChainManagement
@@ -24,10 +24,18 @@ contract SupplyChainManagement {
         string origin;                   // Origin location of the shipment
         string destination;              // Destination location of the shipment
         uint256 quantity;                // Total quantity of items being shipped
-        uint256 damagedQuantity;         // Total quantity of items reported as damaged
+        uint256 totDamagedQuantity;         // Total quantity of items reported as damaged
+        //string damageReason;             // Reason for damaged items (arrived damaged, improper packing, accidents, etc.)
         ShippingStatus status;           // Current status of the shipment
         address[] transitStations;       // Array of addresses representing transit stations
         uint256 currentStationIndex;     // Index of the current station in transitStations array
+        mapping(address => DamageReport) damageReports; // Maps address that reported damage to their report
+    }
+
+    //This struct will allow for easier accessing of what station is associated with what damage quantity and reason
+    struct DamageReport {
+        uint256 damagedQuantity;
+        string damageReason;
     }
 
     // Mapping from shipment ID to Shipment struct
@@ -37,6 +45,9 @@ contract SupplyChainManagement {
     // Mapping: shipment ID => (station address => bool)
     mapping(uint256 => mapping(address => bool)) public stationPassed;
 
+    // Mapping from shipment ID to DamageReport struct
+    mapping(uint256 => DamageReport) public shipmentDamageReports;
+
     // Event emitted when a new shipment is created
     event ShipmentCreated(uint256 shipmentId);
 
@@ -44,7 +55,7 @@ contract SupplyChainManagement {
     event StatusUpdated(uint256 shipmentId, ShippingStatus newStatus);
 
     // Event emitted when damage is reported for a shipment at a station
-    event DamageReported(uint256 shipmentId, uint256 damagedQuantity, address station);
+    event DamageReported(uint256 indexed shipmentId, uint256 damagedQuantity, address indexed reporter, string damageReason);
 
     // Event emitted when a shipment progresses to the next station
     event StationUpdated(uint256 shipmentId, address station);
@@ -73,7 +84,6 @@ contract SupplyChainManagement {
         newShipment.origin = _origin;
         newShipment.destination = _destination;
         newShipment.quantity = _quantity;
-        newShipment.damagedQuantity = 0; // Initialize damaged quantity to zero
         newShipment.status = ShippingStatus.Pending; // Set initial status to Pending
         newShipment.transitStations = _transitStations; // Set transit stations
         newShipment.currentStationIndex = 0; // Start at the first station
@@ -165,7 +175,7 @@ contract SupplyChainManagement {
      * @param _shipmentId The ID of the shipment.
      * @param _damagedQuantity The quantity of items reported as damaged.
      */
-    function reportDamage(uint256 _shipmentId, uint256 _damagedQuantity) public {
+    function reportDamage(uint256 _shipmentId, uint256 _damagedQuantity, string memory _damageReason) public {
         // Retrieve the shipment from storage
         Shipment storage shipment = shipments[_shipmentId];
 
@@ -175,11 +185,22 @@ contract SupplyChainManagement {
         // Ensure that the station has already been passed by the shipment
         require(stationPassed[_shipmentId][msg.sender] == true, "Station has not been passed yet");
 
-        // Increase the damaged quantity of the shipment
-        shipment.damagedQuantity += _damagedQuantity;
+        //Update individual damage report
+        shipment.damageReports[msg.sender] = DamageReport({
+            damagedQuantity: _damagedQuantity,
+            damageReason: _damageReason
+        });
 
+        //Increase the TOTAL damaged quantity of the shipment *** NOT ADDRESS SPECIFIC ***
+        //literally just an accumulator
+        shipment.totDamagedQuantity += _damagedQuantity;
+
+        /*
+        // Set the reason for the damages reported
+        report.damageReason = _damageReason;
+        */
         // Emit an event to signal that damage has been reported
-        emit DamageReported(_shipmentId, _damagedQuantity, msg.sender);
+        emit DamageReported(_shipmentId, _damagedQuantity, msg.sender, _damageReason);
     }
 
     /**
@@ -189,10 +210,12 @@ contract SupplyChainManagement {
      * @return origin The origin location of the shipment.
      * @return destination The destination location of the shipment.
      * @return quantity The total quantity of items being shipped.
-     * @return damagedQuantity The total quantity of items reported as damaged.
+     * @return totDamagedQuantity The total quantity of items reported as damaged.
      * @return status The current status of the shipment.
      * @return transitStations The array of transit station addresses.
      * @return currentStationIndex The index of the current station in the transitStations array.
+     * @return callerDamagedQuantity The specific quantity of items reported as damaged by specific account
+     * @return callerDamageReason The reason provided by the specific account
      */
     function getShipmentDetails(uint256 _shipmentId)
         public
@@ -202,14 +225,17 @@ contract SupplyChainManagement {
             string memory origin,
             string memory destination,
             uint256 quantity,
-            uint256 damagedQuantity,
+            uint256 totDamagedQuantity,
             ShippingStatus status,
             address[] memory transitStations,
-            uint256 currentStationIndex
+            uint256 currentStationIndex,
+            uint256 callerDamagedQuantity,
+            string memory callerDamageReason
         )
     {
         // Retrieve the shipment from storage
         Shipment storage shipment = shipments[_shipmentId];
+        DamageReport storage callerReport = shipment.damageReports[msg.sender];
 
         // Ensure that the shipment exists
         require(shipment.id != 0, "Shipment does not exist");
@@ -220,10 +246,12 @@ contract SupplyChainManagement {
             shipment.origin,
             shipment.destination,
             shipment.quantity,
-            shipment.damagedQuantity,
+            shipment.totDamagedQuantity,
             shipment.status,
             shipment.transitStations,
-            shipment.currentStationIndex
+            shipment.currentStationIndex,
+            callerReport.damagedQuantity,
+            callerReport.damageReason
         );
     }
 

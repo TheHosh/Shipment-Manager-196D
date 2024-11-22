@@ -71,7 +71,7 @@ function App() {
         setCurrentAccount(accounts[0]); // Set the current account
 
         // Replace with your deployed contract address
-        const contractAddress = '0x789Eccb8715C7E27456242cb2C7DE7aB46E8916B';
+        const contractAddress = '0x2766fcf6c12c9844c19e748576525931b8c02cb3';
 
         // Ensure the contract address is a valid Ethereum address
         if (!isAddress(contractAddress)) {
@@ -82,7 +82,7 @@ function App() {
         // Create a new contract instance with the signer
         newContract = new Contract(
           contractAddress,
-          SupplyChainManagement.abi, // The contract's ABI
+          SupplyChainManagement, // The contract's ABI
           newSigner
         );
         setContract(newContract);
