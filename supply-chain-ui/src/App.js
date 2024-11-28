@@ -71,7 +71,7 @@ function App() {
         setCurrentAccount(accounts[0]); // Set the current account
 
         // Replace with your deployed contract address
-        const contractAddress = '0x2766fcf6c12c9844c19e748576525931b8c02cb3';
+        const contractAddress = '0x3eacab06b9ebce45f42c7ba0040be79368d245dd';
 
         // Ensure the contract address is a valid Ethereum address
         if (!isAddress(contractAddress)) {

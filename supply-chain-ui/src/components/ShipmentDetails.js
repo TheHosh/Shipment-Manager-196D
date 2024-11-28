@@ -18,11 +18,11 @@ function ShipmentDetails({ contract }) {
   const [message, setMessage] = useState('');
 
  // Fetch shipment details when shipmentId changes
- useEffect(() => {
   const fetchShipmentDetails = async () => {
     if (!shipmentId) return;
     try {
       const details = await contract.getShipmentDetails(shipmentId);
+
       const [
         id,
         origin,
@@ -48,48 +48,40 @@ function ShipmentDetails({ contract }) {
         callerDamagedQuantity,
         callerDamageReason
       });
-
       setMessage("");
+
+      //fetch and update the damage reporters and quantities list
+      const [reporters, quantities] = await contract.getDamageReports(shipmentId);
+      const reporterList = reporters.map((address, index) => ({
+        address, 
+        damagedQuantity: quantities[index],
+      }));
+      setDamageReporters(reporterList);
+      
     } catch (err) {
       console.error(err);
       setMessage("Error retrieving shipment details.");
     }
   };
 
-  fetchShipmentDetails();
-}, [shipmentId, contract]);
+useEffect(() => { fetchShipmentDetails(); }, [shipmentId]);
 
-// Listen for DamageReported events and update the state
+/**
+   * Listen for any smart contract events to trigger a refresh.
+   */
 useEffect(() => {
   if (!contract) return;
 
-  const handleDamageReported = async (eventShipmentId, damagedQuantity, reporter, damageReason) => {
-    if (shipmentId && eventShipmentId.toString() === shipmentId) {
-      setDamageReporters((prev) => {
-        const updatedReporters = [...prev];
-        const existingReporterIndex = updatedReporters.findIndex(
-          (report) => report.address === reporter
-        );
-
-        if (existingReporterIndex >= 0) {
-          // Update existing reporter
-          updatedReporters[existingReporterIndex].damagedQuantity = damagedQuantity;
-        } else {
-          // Add new reporter
-          updatedReporters.push({ address: reporter, damagedQuantity });
-        }
-
-        return updatedReporters;
-      });
-    }
+  const refreshOnEvent = () => {
+    fetchShipmentDetails(); // Re-fetch shipment details when an event is emitted
   };
 
-  // Attach event listener for DamageReported
-  contract.on("DamageReported", handleDamageReported);
+  // Listen to all events emitted by the contract
+  contract.on("*", refreshOnEvent);
 
   // Cleanup the event listener on component unmount
   return () => {
-    contract.off("DamageReported", handleDamageReported);
+    contract.off("*", refreshOnEvent);
   };
 }, [contract, shipmentId]);
 
@@ -159,7 +151,7 @@ useEffect(() => {
               <ul>
               {damageReporters.map((report, index) => (
                 <li key={index}>
-                  Address: {report.address}, Damaged Quantity: {report.damagedQuantity.toString()}
+                  Address: {report.address}, Damaged Quantity: {" "}{report.damagedQuantity.toString()}
                 </li>
               ))}
             </ul>

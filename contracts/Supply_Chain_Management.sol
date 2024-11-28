@@ -29,6 +29,7 @@ contract SupplyChainManagement {
         ShippingStatus status;           // Current status of the shipment
         address[] transitStations;       // Array of addresses representing transit stations
         uint256 currentStationIndex;     // Index of the current station in transitStations array
+        address[] reporters;
         mapping(address => DamageReport) damageReports; // Maps address that reported damage to their report
     }
 
@@ -45,8 +46,6 @@ contract SupplyChainManagement {
     // Mapping: shipment ID => (station address => bool)
     mapping(uint256 => mapping(address => bool)) public stationPassed;
 
-    // Mapping from shipment ID to DamageReport struct
-    mapping(uint256 => DamageReport) public shipmentDamageReports;
 
     // Event emitted when a new shipment is created
     event ShipmentCreated(uint256 shipmentId);
@@ -186,6 +185,10 @@ contract SupplyChainManagement {
         require(stationPassed[_shipmentId][msg.sender] == true, "Station has not been passed yet");
 
         //Update individual damage report
+        if (shipment.damageReports[msg.sender].damagedQuantity == 0) {
+            shipment.reporters.push(msg.sender); //First add new reporter if they haven't reported on this shipment yet
+        }
+
         shipment.damageReports[msg.sender] = DamageReport({
             damagedQuantity: _damagedQuantity,
             damageReason: _damageReason
@@ -201,6 +204,22 @@ contract SupplyChainManagement {
         */
         // Emit an event to signal that damage has been reported
         emit DamageReported(_shipmentId, _damagedQuantity, msg.sender, _damageReason);
+    }
+
+    function getDamageReports(uint256 _shipmentId) public view returns (address[] memory, uint256[] memory) {
+        Shipment storage shipment = shipments[_shipmentId];
+        uint256 reporterCount = shipment.reporters.length;
+
+        address[] memory reporters = new address[](reporterCount);
+        uint256[] memory quantities = new uint256[](reporterCount);
+
+        for (uint256 i = 0; i < reporterCount; i++) {
+            address reporter = shipment.reporters[i];
+            reporters[i] = reporter;
+            quantities[i] = shipment.damageReports[reporter].damagedQuantity;
+        }
+
+        return (reporters, quantities);
     }
 
     /**
