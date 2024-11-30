@@ -108,7 +108,7 @@ function App() {
 
   // If the contract is not yet initialized, display a loading message
   if (!contract) {
-    return <div>Loading...</div>;
+    return (<div><p>Loading...</p><p>If you are seeing this, you may still need to add the appropriate contract address in the App.js file. Copy it from the deployed contract in either Remix IDE or Truffle.</p></div>);
   }
 
   // Render the main application UI
