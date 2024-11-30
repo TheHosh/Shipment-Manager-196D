@@ -206,20 +206,22 @@ contract SupplyChainManagement {
         emit DamageReported(_shipmentId, _damagedQuantity, msg.sender, _damageReason);
     }
 
-    function getDamageReports(uint256 _shipmentId) public view returns (address[] memory, uint256[] memory) {
+    function getDamageReports(uint256 _shipmentId) public view returns (address[] memory, uint256[] memory, string[] memory) {
         Shipment storage shipment = shipments[_shipmentId];
         uint256 reporterCount = shipment.reporters.length;
 
         address[] memory reporters = new address[](reporterCount);
         uint256[] memory quantities = new uint256[](reporterCount);
+        string[] memory explanations = new string[](reporterCount);
 
         for (uint256 i = 0; i < reporterCount; i++) {
             address reporter = shipment.reporters[i];
             reporters[i] = reporter;
             quantities[i] = shipment.damageReports[reporter].damagedQuantity;
+            explanations[i] = shipment.damageReports[reporter].damageReason;
         }
 
-        return (reporters, quantities);
+        return (reporters, quantities, explanations);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { getAddress } from 'ethers';
+import '../App.css';
 
 /**
  * Component for creating a new shipment in the supply chain.
@@ -61,53 +62,53 @@ function CreateShipment({ contract, currentAccount }) {
 
   return (
     <div className="mt-5">
-      <h2>Create Shipment</h2>
+      <h2 style = {{fontFamily: "Creato-Bold"}}>Create Shipment</h2>
       {/* Display the current connected Ethereum account */}
-      <p>Current Account: {currentAccount}</p>
+      <p style = {{color: "#0D6EFD", fontFamily: "Creato-Light"}}>Current Account: {currentAccount}</p>
       <form onSubmit={handleSubmit}>
         {/* Form fields for shipment details */}
         <div className="form-group">
-          <label>Shipment ID</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Shipment ID</label>
           <input
             type="number"
             className="form-control"
             value={shipmentId}
             onChange={(e) => setShipmentId(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Origin</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Origin</label>
           <input
             type="text"
             className="form-control"
             value={origin}
             onChange={(e) => setOrigin(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Destination</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Destination</label>
           <input
             type="text"
             className="form-control"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Quantity</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Quantity</label>
           <input
             type="number"
             className="form-control"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Transit Stations (comma-separated addresses)</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Transit Stations (comma-separated addresses)</label>
           <input
             type="text"
             className="form-control"
@@ -117,12 +118,12 @@ function CreateShipment({ contract, currentAccount }) {
           />
         </div>
         {/* Submit button */}
-        <button type="submit" className="btn btn-primary mt-3">
+        <button type="submit" className="btn btn-primary mt-3" style = {{fontFamily: "Creato-Light"}}>
           Create Shipment
         </button>
       </form>
       {/* Display messages to the user */}
-      {message && <p className="mt-3">{message}</p>}
+      {message && <p className="mt-3" style = {{fontFamily: "Creato-Light"}}>{message}</p>}
     </div>
   );
 }

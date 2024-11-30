@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import React, { useState } from 'react';
+import '../App.css';
 
 /**
  * Component for viewing the details of a shipment.
@@ -10,7 +11,7 @@ import React, { useState } from 'react';
  * Props:
  * - contract: The instance of the smart contract to interact with.
  */
-function ShipmentDetails({ contract }) {
+function ShipmentDetails({ contract, currentAccount }) {
   // State variables to hold form input values, shipment details, and messages
   const [shipmentId, setShipmentId] = useState('');
   const [shipmentDetails, setShipmentDetails] = useState(null);
@@ -51,10 +52,11 @@ function ShipmentDetails({ contract }) {
       setMessage("");
 
       //fetch and update the damage reporters and quantities list
-      const [reporters, quantities] = await contract.getDamageReports(shipmentId);
+      const [reporters, quantities, explanations] = await contract.getDamageReports(shipmentId);
       const reporterList = reporters.map((address, index) => ({
         address, 
-        damagedQuantity: quantities[index],
+        damagedQuantity: quantities[index], 
+        explanation: explanations[index]
       }));
       setDamageReporters(reporterList);
       
@@ -109,10 +111,12 @@ useEffect(() => {
   return (
     <>
       <div className="mt-5">
-        <h2>View Shipment Details</h2>
+        <h2 style = {{fontFamily: "Creato-Bold"}}>View Shipment Details</h2>
+        {/* Display the current connected Ethereum account */}
+        <p style = {{color: "#0D6EFD", fontFamily: "Creato-Light"}}>Current Account: {currentAccount}</p>
         {/* Form field for shipment ID */}
         <div className="form-group">
-          <label>Shipment ID</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Shipment ID</label>
           <input
             type="number"
             className="form-control"
@@ -126,55 +130,51 @@ useEffect(() => {
         {/* Display shipment details if available */}
         {shipmentDetails && (
           <div className="mt-4">
-            <h3>Shipment Information:</h3>
             <p>
-              <strong>ID:</strong> {shipmentDetails.id.toString()}
+              <strong style = {{fontFamily: "Creato-Light"}}>ID:</strong> {shipmentDetails.id.toString()}
             </p>
             <p>
-              <strong>Origin:</strong> {shipmentDetails.origin}
+              <strong style = {{fontFamily: "Creato-Light"}}>Origin:</strong> {shipmentDetails.origin}
             </p>
             <p>
-              <strong>Destination:</strong> {shipmentDetails.destination}
+              <strong style = {{fontFamily: "Creato-Light"}}>Destination:</strong> {shipmentDetails.destination}
             </p>
             <p>
-              <strong>Quantity:</strong> {shipmentDetails.quantity.toString()}
+              <strong style = {{fontFamily: "Creato-Light"}}>Quantity:</strong> {shipmentDetails.quantity.toString()}
             </p>
-            <div className="shipment-details-damages">
-              <p>
-                <strong>Total Damaged Quantity:</strong>{' '}
-                {shipmentDetails.totDamagedQuantity.toString()}
-              </p>
-              <p>
-                <strong>Damage Reporters & Quantity:
-                </strong>
-              </p>
-              <ul>
-              {damageReporters.map((report, index) => (
-                <li key={index}>
-                  Address: {report.address}, Damaged Quantity: {" "}{report.damagedQuantity.toString()}
-                </li>
-              ))}
-            </ul>
-            </div>
             <p>
-              <strong>Status:</strong>{" "}
+              <strong style = {{fontFamily: "Creato-Light"}}>Total Damaged Quantity:</strong>{' '}
+              {shipmentDetails.totDamagedQuantity.toString()}
+            </p>
+            <p>
+                <strong style = {{fontFamily: "Creato-Light"}}>Damage Reporters & Quantity: </strong>
+              {damageReporters.length > 0 ? (
+                damageReporters.map((report, index) => (
+                    <li key={index} style = {{textIndent: "1.2vw"}}>
+                      <strong style = {{fontFamily: "Creato-Light"}}>Address:</strong> {report.address} &emsp; <strong style = {{fontFamily: "Creato-Light"}}>Damaged Quantity:</strong> {" "}{report.damagedQuantity.toString()} &emsp; <strong style = {{fontFamily: "Creato-Light"}}>Explanation:</strong> {report.explanation}
+                    </li>
+                ))
+              ) : (<inline>N/A</inline>)
+              }
+            </p>
+            <p>
+              <strong style = {{fontFamily: "Creato-Light"}}>Status:</strong>{" "}
               {getStatus(Number(shipmentDetails.status))}
             </p>
             <p>
-              <strong>Current Station Index:</strong>{" "}
+              <strong style = {{fontFamily: "Creato-Light"}}>Current Station Index:</strong>{" "}
               {shipmentDetails.currentStationIndex.toString()}
             </p>
             <p>
-              <strong>Transit Stations:</strong>
-            </p>
-            <ul>
+              <strong style = {{fontFamily: "Creato-Light"}}>Transit Stations:</strong>
               {shipmentDetails.transitStations.map((station, index) => (
-                <li key={index}>{station}</li>
+                <li key={index} style = {{textIndent: "1.2vw"}}> <strong style = {{fontFamily: "Creato-Light"}}>Address:</strong> {station}</li>
               ))}
-            </ul>
+            </p>
           </div>
         )}
       </div>
+      <br></br><br></br><br></br><br></br>
     </>
   );
 }

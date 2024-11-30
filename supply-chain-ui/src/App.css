@@ -1,38 +1,24 @@
-.App {
-  text-align: center;
+@font-face {
+    font-family: Coolvetica;
+    src: url("./fonts/COOLVETICA.OTF");
+    font-weight:400;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@font-face {
+    font-family: Creato-Light;
+    src: url("./fonts/CreatoDisplay-Bold.otf");
+    font-weight:400;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+@font-face {
+    font-family: Creato-Bold;
+    src: url("./fonts/CreatoDisplay-ExtraBold.otf");
+    font-weight:400;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logo {
+    content:url("./logo.png");
+    width: 15vh;
+    padding: 2vh;
+    float: left;
 }

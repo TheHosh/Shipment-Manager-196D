@@ -1,6 +1,7 @@
 // src/components/ReportDamage.js
 
 import React, { useState } from 'react';
+import '../App.css';
 
 /**
  * Component for reporting damage to a shipment.
@@ -37,33 +38,33 @@ function ReportDamage({ contract, currentAccount }) {
 
   return (
     <div className="mt-5">
-      <h2>Report Damage</h2>
+      <h2 style = {{fontFamily: "Creato-Bold"}}>Report Damage</h2>
       {/* Display the current connected Ethereum account */}
-      <p>Current Account: {currentAccount}</p>
+      <p style = {{color: "#0D6EFD", fontFamily: "Creato-Light"}}>Current Account: {currentAccount}</p>
       <form onSubmit={handleReport}>
         {/* Form fields for shipment ID and damaged quantity */}
         <div className="form-group">
-          <label>Shipment ID</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Shipment ID</label>
           <input
             type="number"
             className="form-control"
             value={shipmentId}
             onChange={(e) => setShipmentId(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Damaged Quantity</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Damaged Quantity</label>
           <input
             type="number"
             className="form-control"
             value={damagedQuantity}
             onChange={(e) => setDamagedQuantity(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Explanation for Damages</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Explanation for Damages</label>
           <input
             type="text"
             className="form-control"
@@ -73,12 +74,12 @@ function ReportDamage({ contract, currentAccount }) {
           />
         </div>
         {/* Submit button */}
-        <button type="submit" className="btn btn-primary mt-3">
+        <button type="submit" className="btn btn-primary mt-3" style = {{fontFamily: "Creato-Light"}}>
           Report Damage
         </button>
       </form>
       {/* Display messages to the user */}
-      {message && <p className="mt-3">{message}</p>}
+      {message && <p className="mt-3" style = {{fontFamily: "Creato-Light"}}>{message}</p>}
     </div>
   );
 }
