@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { getAddress } from 'ethers';
+import '../App.css';
 
 /**
  * Component for progressing a shipment to the next station.
@@ -57,13 +58,13 @@ function ProgressShipment({ contract, currentAccount }) {
 
   return (
     <div className="mt-5">
-      <h2>Progress Shipment</h2>
+      <h2 style = {{fontFamily: "Creato-Bold"}}>Progress Shipment</h2>
       {/* Display the current connected Ethereum account */}
-      <p>Current Account: {currentAccount}</p>
+      <p style = {{color: "#0D6EFD", fontFamily: "Creato-Light"}}>Current Account: {currentAccount}</p>
       <form onSubmit={handleProgress}>
         {/* Form field for shipment ID */}
         <div className="form-group">
-          <label>Shipment ID</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Shipment ID</label>
           <input
             type="number"
             className="form-control"
@@ -73,7 +74,7 @@ function ProgressShipment({ contract, currentAccount }) {
           />
         </div>
         {/* Submit button */}
-        <button type="submit" className="btn btn-primary mt-3">
+        <button type="submit" className="btn btn-primary mt-3" style = {{fontFamily: "Creato-Light"}}>
           Progress Shipment
         </button>
       </form>
@@ -82,7 +83,7 @@ function ProgressShipment({ contract, currentAccount }) {
         <p className="mt-3">Expected Next Station: {expectedNextStation}</p>
       )}
       {/* Display messages to the user */}
-      {message && <p className="mt-3">{message}</p>}
+      {message && <p className="mt-3" style = {{fontFamily: "Creato-Light"}}>{message}</p>}
     </div>
   );
 }

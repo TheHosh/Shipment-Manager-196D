@@ -7,6 +7,7 @@ import CreateShipment from './components/CreateShipment';
 import ProgressShipment from './components/ProgressShipment';
 import ReportDamage from './components/ReportDamage';
 import ShipmentDetails from './components/ShipmentDetails';
+import './App.css';
 
 /**
  * The main application component.
@@ -71,7 +72,7 @@ function App() {
         setCurrentAccount(accounts[0]); // Set the current account
 
         // Replace with your deployed contract address
-        const contractAddress = '0x789Eccb8715C7E27456242cb2C7DE7aB46E8916B';
+        const contractAddress = 'your deployed contract address here';
 
         // Ensure the contract address is a valid Ethereum address
         if (!isAddress(contractAddress)) {
@@ -82,7 +83,7 @@ function App() {
         // Create a new contract instance with the signer
         newContract = new Contract(
           contractAddress,
-          SupplyChainManagement.abi, // The contract's ABI
+          SupplyChainManagement, // The contract's ABI
           newSigner
         );
         setContract(newContract);
@@ -107,20 +108,28 @@ function App() {
 
   // If the contract is not yet initialized, display a loading message
   if (!contract) {
-    return <div>Loading...</div>;
+    return (<div><p>Loading...</p><p>If you are seeing this, you may still need to add the appropriate contract address in the App.js file. Copy it from the deployed contract in either Remix IDE or Truffle.</p></div>);
   }
 
   // Render the main application UI
   return (
     <div className="container">
-      <h1 className="mt-4">Supply Chain Management DApp</h1>
-      {/* Display the connected Ethereum account */}
-      <p>Connected Account: {currentAccount}</p>
+       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <h1 className="mt-4" style={{ fontFamily: "Coolvetica", fontSize: 70 }}>
+            chainmail: a Supply Chain DApp
+          </h1>
+          <p style={{ color: "#0D6EFD", fontFamily: "Creato-Light", fontSize: 25 }}>
+            Connected Account: {currentAccount}
+          </p>
+        </div>
+        <div className="logo"></div>
+      </div>
       {/* Pass the contract and current account as props to child components */}
       <CreateShipment contract={contract} currentAccount={currentAccount} />
       <ProgressShipment contract={contract} currentAccount={currentAccount} />
       <ReportDamage contract={contract} currentAccount={currentAccount} />
-      <ShipmentDetails contract={contract} />
+      <ShipmentDetails contract={contract} currentAccount={currentAccount}/>
     </div>
   );
 }

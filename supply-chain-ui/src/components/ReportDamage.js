@@ -1,6 +1,7 @@
 // src/components/ReportDamage.js
 
 import React, { useState } from 'react';
+import '../App.css';
 
 /**
  * Component for reporting damage to a shipment.
@@ -14,6 +15,7 @@ function ReportDamage({ contract, currentAccount }) {
   // State variables to hold form input values and messages
   const [shipmentId, setShipmentId] = useState('');
   const [damagedQuantity, setDamagedQuantity] = useState('');
+  const [damageReason, setDamageReason] = useState('')
   const [message, setMessage] = useState('');
 
   /**
@@ -25,7 +27,7 @@ function ReportDamage({ contract, currentAccount }) {
     e.preventDefault();
     try {
       // Interact with the smart contract to report damage
-      const tx = await contract.reportDamage(shipmentId, damagedQuantity);
+      const tx = await contract.reportDamage(shipmentId, damagedQuantity, damageReason);
       await tx.wait(); // Wait for the transaction to be mined
       setMessage('Damage reported successfully.');
     } catch (err) {
@@ -36,38 +38,48 @@ function ReportDamage({ contract, currentAccount }) {
 
   return (
     <div className="mt-5">
-      <h2>Report Damage</h2>
+      <h2 style = {{fontFamily: "Creato-Bold"}}>Report Damage</h2>
       {/* Display the current connected Ethereum account */}
-      <p>Current Account: {currentAccount}</p>
+      <p style = {{color: "#0D6EFD", fontFamily: "Creato-Light"}}>Current Account: {currentAccount}</p>
       <form onSubmit={handleReport}>
         {/* Form fields for shipment ID and damaged quantity */}
         <div className="form-group">
-          <label>Shipment ID</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Shipment ID</label>
           <input
             type="number"
             className="form-control"
             value={shipmentId}
             onChange={(e) => setShipmentId(e.target.value)}
             required
-          />
+          /><br></br>
         </div>
         <div className="form-group">
-          <label>Damaged Quantity</label>
+          <label style = {{fontFamily: "Creato-Light"}}>Damaged Quantity</label>
           <input
             type="number"
             className="form-control"
             value={damagedQuantity}
             onChange={(e) => setDamagedQuantity(e.target.value)}
             required
+          /><br></br>
+        </div>
+        <div className="form-group">
+          <label style = {{fontFamily: "Creato-Light"}}>Explanation for Damages</label>
+          <input
+            type="text"
+            className="form-control"
+            value={damageReason}
+            onChange={(e) => setDamageReason(e.target.value)}
+            required
           />
         </div>
         {/* Submit button */}
-        <button type="submit" className="btn btn-primary mt-3">
+        <button type="submit" className="btn btn-primary mt-3" style = {{fontFamily: "Creato-Light"}}>
           Report Damage
         </button>
       </form>
       {/* Display messages to the user */}
-      {message && <p className="mt-3">{message}</p>}
+      {message && <p className="mt-3" style = {{fontFamily: "Creato-Light"}}>{message}</p>}
     </div>
   );
 }
