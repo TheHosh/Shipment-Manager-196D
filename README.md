@@ -59,6 +59,8 @@ This command installs all the dependencies listed in package.json, including Rea
 
 You have two options for compiling and deploying the smart contract: using Truffle or using Remix IDE.
 
+*Truffle is a bit more involved than Remix. We recommend following our guide to using Remix IDE to deploy the smart contract unless you are more comfrotable with Truffle.*
+
 -Using Remix IDE-
 
 1. Start Ganache
@@ -77,6 +79,7 @@ You have two options for compiling and deploying the smart contract: using Truff
 
 *In Remix, click on the "Deploy & Run Transactions" tab on the left sidebar (represented by a Ethereum logo).
 Under Environment, select "Web3 Provider".
+
 A prompt will appear asking for the Web3 provider endpoint.
 Enter the Ganache RPC server address (e.g., http://127.0.0.1:7545) and click OK.*
 
