@@ -5,8 +5,7 @@ Table of Contents
 Prerequisites
 Project Setup
 Smart Contract Deployment
-Option A: Using Truffle
-Option B: Using Remix IDE
+Using Remix IDE
 Frontend Configuration
 Running the Application
 Testing the DApp
@@ -24,98 +23,24 @@ Project Setup
 1. Clone the Repository
 Open your terminal and clone the repository:
 
-bash
-Copy code
+```bash
 git clone https://github.com/TheHosh/Supply-Chain-196D
-
+```
 2. Navigate to the Project Directory
-bash
-Copy code
+```bash
 cd supply-chain-dapp
+```
 3. Install Dependencies
 Install the required Node.js packages:
-
-bash
-Copy code
+```bash
 npm install
+```
 This command installs all the dependencies listed in package.json, including React and ethers.js.
 
 Smart Contract Deployment
 You have two options for compiling and deploying the smart contract: using Truffle or using Remix IDE.
 
-Option A: Using Truffle
-<details> <summary>Click to expand instructions for using Truffle</summary>
-1. Install Truffle (if not already installed)
-We will use Truffle to compile and deploy the smart contract.
-
-bash
-Copy code
-npm install -g truffle
-2. Start Ganache
-Open Ganache to run a local Ethereum blockchain:
-
-GUI Version:
-Download and install Ganache from Truffle Suite.
-Open Ganache and click on Quickstart Ethereum to start a new workspace.
-CLI Version:
-Install Ganache CLI:
-bash
-Copy code
-npm install -g ganache-cli
-Start Ganache CLI:
-bash
-Copy code
-ganache-cli
-3. Configure Truffle
-Create a truffle-config.js file in the root directory with the following content:
-
-javascript
-Copy code
-module.exports = {
-  networks: {
-    development: {
-      host: "127.0.0.1", // Localhost
-      port: 7545,        // Ganache GUI default port (use 8545 if using Ganache CLI)
-      network_id: "*"    // Match any network id
-    },
-  },
-  // Configure your compilers
-  compilers: {
-    solc: {
-      version: "0.8.0", // Specify the Solidity compiler version
-    },
-  },
-};
-4. Create the Smart Contract
-Create a contracts directory and add SupplyChainManagement.sol with your smart contract code.
-
-5. Compile the Smart Contract
-bash
-Copy code
-truffle compile
-Ensure that the contract compiles without errors.
-
-6. Deploy the Smart Contract
-Create a migration script in the migrations directory (e.g., 2_deploy_contracts.js):
-
-javascript
-Copy code
-const SupplyChainManagement = artifacts.require("SupplyChainManagement");
-
-module.exports = function (deployer) {
-  deployer.deploy(SupplyChainManagement);
-};
-Deploy the contract to the local Ganache blockchain:
-
-bash
-Copy code
-truffle migrate --reset
-After deployment, note the contract address displayed in the console output.
-
-</details>
-Option B: Using Remix IDE
-<details> <summary>Click to expand instructions for using Remix IDE</summary>
-If you prefer not to use Truffle, you can use Remix IDE to compile and deploy the smart contract.
+Using Remix IDE
 
 1. Start Ganache
 Ensure that Ganache is running:
@@ -135,6 +60,7 @@ Copy and paste your smart contract code into this file.
 5. Compile the Smart Contract
 Click on the "Solidity Compiler" tab on the left sidebar (represented by a gavel icon).
 Ensure the compiler version matches the version specified in your smart contract (e.g., 0.8.0).
+Click on the Advanced Configurations and make sure to set the EVM Version to London.
 Click Compile SupplyChainManagement.sol.
 6. Deploy the Smart Contract
 Go back to the "Deploy & Run Transactions" tab.
@@ -143,27 +69,25 @@ Click Deploy.
 The contract will be deployed to the Ganache blockchain.
 After deployment, the deployed contract will appear under Deployed Contracts.
 Expand the deployed contract, and you'll find the contract address.
-7. Retrieve the Contract ABI
-In the File Explorer, find the artifacts folder (if generated) or use the Compilation Details:
+7. Retrieve the Contract ABI and Update the ABI
 
 Click on the "Solidity Compiler" tab.
-After compiling, click on the ABI button to copy the ABI.
-Paste the ABI into a new JSON file named SupplyChainManagement.json in your React app's src/contracts directory.
-8. Update the Contract Address and ABI in the React App
+At the bottom of the Solodity Compiler tab, you will see a copy action for copying the ABI.
+Click on the ABI button to copy the ABI.
+Paste the ABI over the contents of the JSON file named SupplyChainManagement.json in your React app's src/contracts directory.
+
+8. Update the Contract Address in the React App
 In your React application's src directory:
 
 Update Contract Address:
 
-In App.js, replace the placeholder contract address with the one obtained from the deployment step:
+In App.js, replace the contract address with the one obtained from the deployment step:
 
-javascript
-Copy code
+
+```plaintext
 // Replace with your deployed contract address
 const contractAddress = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
-Update ABI:
-
-Replace the content of SupplyChainManagement.json in src/contracts with the ABI you copied from Remix.
-</details>
+```
 Frontend Configuration
 1. Configure MetaMask
 Add Localhost Network:
@@ -203,9 +127,9 @@ Running the Application
 1. Start the React Application
 In the project directory, run:
 
-bash
-Copy code
+```bash
 npm start
+```
 This command starts the React development server. Open http://localhost:3000 to view the app in your browser.
 
 2. Connect MetaMask to the Application
