@@ -41,7 +41,6 @@ Smart Contract Deployment
 You have two options for compiling and deploying the smart contract: using Truffle or using Remix IDE.
 
 Using Remix IDE
-<details> <summary>Click to expand instructions for using Remix IDE</summary>
 
 1. Start Ganache
 Ensure that Ganache is running:
