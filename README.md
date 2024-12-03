@@ -183,7 +183,7 @@ Assign each account to a station (e.g., Account 1 = Station 1, Account 2 = Stati
 
 1. Start the React Application
 
-In the project directory, run:
+In the project directory (supply-chain-ui), run:
 
 ```bash
 npm start
