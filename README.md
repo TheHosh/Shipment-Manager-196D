@@ -93,7 +93,7 @@ Copy and paste your smart contract code into this file.*
 *Click on the "Solidity Compiler" tab on the left sidebar (represented by a gavel icon).
 Ensure the compiler version matches the version specified in your smart contract (e.g., 0.8.0).
 Click on the Advanced Configurations and make sure to set the EVM Version to London.
-Click Compile SupplyChainManagement.sol.*
+Click Compile SupplyChainManagement.sol. If this does not work, then you can also use 0.8.7 for better compatability with London EVM.*
 
 7. Deploy the Smart Contract
 
